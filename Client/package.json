@@ -7,15 +7,16 @@
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
     "antd": "^4.0.1",
+    "cross-env": "^7.0.2",
     "next": "^9.2.2",
     "react": "^16.13.0",
     "react-dom": "^16.13.0",
     "react-scripts": "3.4.0"
   },
   "scripts": {
-    "dev": "next",
-    "start": "next start",
-    "build": "next build",
+    "dev": "cross-env NODE_PATH=src next ./src",
+    "start": "cross-env NODE_PATH=src next start ./src",
+    "build": "cross-env NODE_PATH=src next build ./src",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
@@ -35,9 +36,9 @@
     ]
   },
   "devDependencies": {
+    "eslint": "^6.8.0",
     "eslint-plugin-import": "^2.20.1",
     "eslint-plugin-react": "^7.18.3",
-    "eslint-plugin-react-hooks": "^2.5.0",
-    "eslint": "^6.8.0"
+    "eslint-plugin-react-hooks": "^2.5.0"
   }
 }
