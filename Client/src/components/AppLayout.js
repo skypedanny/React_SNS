@@ -2,16 +2,17 @@ import React from "react";
 
 import { Menu, Input } from "antd";
 
-const AppLayout = () => {
+const AppLayout = ({children}) => {
   return (
     <div>
-      <Menu>
+      <Menu mode="horizontal">
         <Menu.Item key="home">Twitter</Menu.Item>
         <Menu.Item key="profile">Profile</Menu.Item>
         <Menu.Item key="mail">
-          <Input.Search enterButton />
+          <Input.Search enterButton style={ { verticalAlign: 'middle' }} />
         </Menu.Item>
       </Menu>
+      {children}
     </div>
   );
 };
