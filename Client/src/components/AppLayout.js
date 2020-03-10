@@ -3,12 +3,14 @@ import Link from "next/link";
 import PropTypes from "prop-types";
 
 import { Menu, Input, Button, Row, Col, Card, Avatar } from "antd";
+import LoginForm from "./LoginForm";
 
 const dummy = {
   nickname: "Danny",
   Post: [],
   Followings: [],
-  Followers: [] 
+  Followers: [],
+  isLoggedIn: false
 };
 
 const AppLayout = ({ children }) => {
@@ -29,24 +31,36 @@ const AppLayout = ({ children }) => {
           <Input.Search enterButton style={{ verticalAlign: "middle" }} />
         </Menu.Item>
       </Menu>
-      <Row>
+      <Row gutter={10}>
         <Col xs={24} md={6}>
-          <Card 
-            actions={[
-              <div key="post">Post<br />{dummy.Post.length}</div>,
-              <div key="follower">follower<br />{dummy.Followers.length}</div>,
-              <div key="following">following<br />{dummy.Followings.length}</div>
-            ]}>
-            <Card.Meta
-              avatar={<Avatar>{dummy.nickname[0]}</Avatar>}
-              title={dummy.nickname}
-            />
-          </Card>
-          <Link href="/signup">
-            <a>
-              <Button>Sign Up</Button>
-            </a>
-          </Link>
+          {dummy.isLoggedIn ? (
+            <Card
+              actions={[
+                <div key="post">
+                  Post
+                  <br />
+                  {dummy.Post.length}
+                </div>,
+                <div key="follower">
+                  follower
+                  <br />
+                  {dummy.Followers.length}
+                </div>,
+                <div key="following">
+                  following
+                  <br />
+                  {dummy.Followings.length}
+                </div>
+              ]}
+            >
+              <Card.Meta
+                avatar={<Avatar>{dummy.nickname[0]}</Avatar>}
+                title={dummy.nickname}
+              />
+            </Card>
+          ) : (
+            <LoginForm />
+          )}
         </Col>
         <Col xs={24} md={12}>
           {children}
