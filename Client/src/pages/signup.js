@@ -1,46 +1,49 @@
-import React, { useState } from "react";
-import AppLayout from "components/AppLayout";
+import React, { useState, useCallback } from "react";
 
-import Head from 'next/head';
-import { Form, Input, Checkbox, Button } from "antd";
+import { Input, Checkbox, Button } from "antd";
 
-const signup = () => {
-  const [id, setId] = useState('');
-  const [nick, setNick] = useState('');
-  const [password, setPassword] = useState('');
+const Signup = () => {
   const [passwordCheck, setPasswordCheck] = useState('');
   const [term, setTerm] = useState(false);
+  const [passwordError, setPasswordError] = useState(false);
+  const [termError, setTermError] = useState(false);
+  
+  const useInput = (initValue = null) => {
+    const [value, setter] = useState(initValue);
+    const handler = useCallback((e) => {
+      setter(e.target.value);
+    }, []);
+    return[value, handler];
+  };
+  
+  const [id, onChangeId] = useInput('');
+  const [nick, onChangeNick] = useInput('');
+  const [password, onChangePassword] = useInput('');
+  
+  const onSubmit = useCallback((e) => {
+    console.log('complete')
+    e.preventDefault();
+    if (password !== passwordCheck) {
+      return setPasswordError(true);
+    }
+    if (!term) {
+      return setTermError(true);
+    }
+  }, [password, passwordCheck, term]);
 
-  const onSubmit = () => {};
-  const onChangeId = (e) => {
-      setId(e.target.value);
-  };
-  const onChangeNick = (e) => {
-      setNick(e.target.value);
-  };
-  const onChangePassword = (e) => {
-      setPassword(e.target.value);
-  };
-  const onChangePasswordChk = (e) => {
+  const onChangePasswordCheck = useCallback((e) => {
+      setPasswordError(e.target.value !== password);
       setPasswordCheck(e.target.value);
-  };
-  const onChangeTerm = (e) => {
-      setTerm(e.target.value);
-  };
+  }, [password]);
+
+  const onChangeTerm = useCallback((e) => {
+      setTermError(false);
+      setTerm(e.target.checked);
+  }, []);
 
   return (
     <>
-      <Head>
-        <title>SNS</title>
-        <link
-          rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/antd/4.0.1/antd.css"
-        />
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/antd/4.0.1/antd.min.js" />
-      </Head>
-
-      <AppLayout>
-        <Form onSubmit={onSubmit} style={{ padding: 12, alignItems: "center" }}>
+        <form onSubmit={onSubmit} style={{ padding: 12 }}>
             <div>
                 <label htmlFor="user-id">ID</label>
                 <br />
@@ -62,20 +65,21 @@ const signup = () => {
             <div>
                 <label htmlFor="user-password-check">Re Password</label>
                 <br />
-                <Input name="user-password-check" type="password" value={passwordCheck} required onChange={onChangePasswordChk} /> 
+                <Input name="user-password-check" type="password" value={passwordCheck} required onChange={onChangePasswordCheck} /> 
+                {passwordError && <div style={{ color: 'red' }}>비밀번호가 일치하지 않습니다.</div>}
             </div>
 
             <div>
-                <Checkbox name="user-term" value={term} onChange={onChangeTerm}>'이대훈'이 잘생겼다고 생각하면 체크하십시오.</Checkbox>
+                <Checkbox name="user-term" checked={term} onChange={onChangeTerm}>'이대훈'이 잘생겼다고 생각하면 체크하십시오.</Checkbox>
+                {termError && <div style={{ color: 'red' }}>약관에 동의하셔야합니다.</div>}
             </div>
 
-            <div>
+            <div style={{ marginTop: 10 }}>
                 <Button type="primary" htmlType="submit">Send</Button>
             </div>
-        </Form>
-      </AppLayout>
+        </form>
     </>
   );
 };
 
-export default signup;
+export default Signup;
