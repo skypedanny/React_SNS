@@ -1,20 +1,39 @@
-const initialState = {
-  isLoggedIn: false,
-  user: {}
+const dummyUser = {
+   nickname: "Danny",
+   Post: [],
+   Followings: [],
+   Followers: [],
+   signUpdata: {
+
+   }
 };
 
-const LOG_IN = "LOG_IN";
-const LOG_OUT = "LOG_OUT";
+export const initialState = {
+  isLoggedIn: false,
+  user: null
+};
 
-const loginAction = {
+export const LOG_IN = "LOG_IN";
+export const LOG_OUT = "LOG_OUT";
+export const SIGN_UP = "SIGN_UP";
+
+export const loginAction = {
   type: LOG_IN,
   data: {
     nickname: "danny"
   }
 };
 
-const loginAction = {
+export const logoutAction = {
   type: LOG_OUT
+};
+
+export const signUpAction = (data) => {
+  return {
+    type: SIGN_UP,
+    data: data
+  }
+  
 };
 
 const reducer = (state = initialState, action) => {
@@ -23,7 +42,7 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         isLoggedIn: true,
-        user: action.data
+        user: dummyUser,
       };
     }
     case LOG_OUT: {
@@ -33,5 +52,18 @@ const reducer = (state = initialState, action) => {
         user: null
       };
     }
+    case SIGN_UP: {
+      return {
+        ...state,
+        signUpdata: action.data
+      }
+    }
+    default: {
+      return {
+        ...state
+      };
+    }
   }
 };
+
+export default reducer;
