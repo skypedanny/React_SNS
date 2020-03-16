@@ -4,10 +4,10 @@ import { Provider } from "react-redux";
 import reducer from "reducers";
 import withRedux from "next-redux-wrapper";
 import { createStore, compose, applyMiddleware } from "redux";
+import createSagaMiddleware from "redux-saga";
 
 import Head from "next/head";
 import AppLayout from "components/AppLayout";
-import sagaMiddleware from "sagas/middleware";
 import rootSaga from "sagas";
 
 const SNS = ({ Component, store }) => {
@@ -34,7 +34,9 @@ SNS.propTypes = {
   store: PropTypes.object
 };
 
-export default withRedux((initialState, options) => {
+const configureStore = (initialState, options) => {
+  const sagaMiddleware = createSagaMiddleware();
+
   const middlewares = [sagaMiddleware];
   const enhancer =
     process.env.NODE_ENV === "production"
@@ -50,4 +52,6 @@ export default withRedux((initialState, options) => {
   const store = createStore(reducer, initialState, enhancer);
   sagaMiddleware.run(rootSaga);
   return store;
-})(SNS);
+};
+
+export default withRedux(configureStore)(SNS);
